@@ -17,7 +17,7 @@ make
 
 sudo make install
 
-sudo apt install python3-pip
+sudo apt install python3-pip libfl2
 
 pip3 install bleak
 
@@ -33,5 +33,7 @@ adafruit-nrfutil version
 
 arduino-cli core install adafruit:nrf52
 
-arduino-cli compile -b adafruit:nrf52:cluenrf52840 ino/test/
+arduino-cli compile -b adafruit:nrf52:cluenrf52840 ino/
+
+arduino-cli upload -b adafruit:nrf52:cluenrf52840 -p /dev/ttyACM0 ino/
 
