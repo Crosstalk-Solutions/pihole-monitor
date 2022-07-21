@@ -19,15 +19,13 @@ sudo make install
 
 sudo apt install python3-pip libfl2
 
-pip3 install bleak
+pip3 install bleak adafruit-nrfutil
 
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
 
 arduino-cli config init
 
 arduino-cli config set board_manager.additional_urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
-
-pip3 install adafruit-nrfutil
 
 adafruit-nrfutil version
 
