@@ -20,3 +20,18 @@ sudo make install
 sudo apt install python3-pip
 
 pip3 install bleak
+
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
+
+arduino-cli config init
+
+arduino-cli config set board_manager.additional_urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+
+pip3 install adafruit-nrfutil
+
+adafruit-nrfutil version
+
+arduino-cli core install adafruit:nrf52
+
+arduino-cli compile -b adafruit:nrf52:cluenrf52840 ino/test/
+
