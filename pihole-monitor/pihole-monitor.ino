@@ -154,9 +154,14 @@ void loop()
     bleuart.write( buf, count );
   }
 
-  if(digitalRead(LEFT_BUTTON)== HIGH){
-    // color++;
-    // arcada.display->setTextColor(COLORS[color]);
+  if(digitalRead(LEFT_BUTTON) == HIGH){
+    left_button_state = false;
+  } else {
+    if(left_button_state){
+      color++;
+      arcada.display->setTextColor(COLORS[color]);
+    }
+    left_button_state = true;
   }
 
   // Forward from BLEUART to HW Serial
