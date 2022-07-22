@@ -58,7 +58,7 @@ async def uart_terminal():
     async with BleakClient(device, disconnected_callback=handle_disconnect) as client:
         await client.start_notify(UART_TX_CHAR_UUID, handle_rx)
 
-        print("Connected, start typing and press ENTER...")
+        print("Connected...")
 
         loop = asyncio.get_running_loop()
 
@@ -77,6 +77,7 @@ async def uart_terminal():
             data = str.encode(data)
             # data will be empty on EOF (e.g. CTRL+D on *nix)
             if not data:
+                print(no data)
                 break
 
             # some devices, like devices running MicroPython, expect Windows
