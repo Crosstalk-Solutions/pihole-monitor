@@ -167,7 +167,7 @@ void loop()
       arcada.display->setCursor(0, 40);
       arcada.display->println("Blocked Domains");
       arcada.display->println(numBlocked);
-      recvText[0]='\0';
+      recvText = "";
     }
   }
 
