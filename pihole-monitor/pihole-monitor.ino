@@ -25,21 +25,20 @@ int current_color = 0;
 
 bool left_button_state = false;
 
-const int PIHOLE_COLORS[] ={0xFFFF,0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0};
+const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
 String numBlocked = "0";
 String numQueries = "0";
 String numBlockedToday = "0";
 String pctBlockedPercent = "0.0%";
 
-#define BLACK    0x0000
+#define BLACK 0x0000
 
 // BLE Service
-BLEDfu  bledfu;  // OTA DFU service
-BLEDis  bledis;  // device information
+BLEDfu bledfu;   // OTA DFU service
+BLEDis bledis;   // device information
 BLEUart bleuart; // uart over ble
-BLEBas  blebas;  // battery
-
+BLEBas blebas;   // battery
 
 Adafruit_Arcada arcada;
 
@@ -48,14 +47,13 @@ Adafruit_APDS9960 apds;
 
 char recvText[1] = "";
 
-
-
 void setup()
 {
   Serial.begin(115200);
 #if CFG_DEBUG
   // Blocking wait for connection when debug mode is enabled via IDE
-  while ( !Serial ) yield();
+  while (!Serial)
+    yield();
 #endif
 
   Serial.println("Bluefruit52 BLEUART Example");
@@ -72,8 +70,8 @@ void setup()
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
 
   Bluefruit.begin();
-  Bluefruit.setTxPower(4);    // Check bluefruit.h for supported values
-  //Bluefruit.setName(getMcuUniqueID()); // useful testing with multiple central connections
+  Bluefruit.setTxPower(4); // Check bluefruit.h for supported values
+  // Bluefruit.setName(getMcuUniqueID()); // useful testing with multiple central connections
   Bluefruit.Periph.setConnectCallback(connect_callback);
   Bluefruit.Periph.setDisconnectCallback(disconnect_callback);
 
@@ -94,8 +92,7 @@ void setup()
 
   apds.begin();
 
-
-  //gesture mode will be entered once proximity mode senses something close
+  // gesture mode will be entered once proximity mode senses something close
   apds.enableProximity(true);
   apds.enableGesture(true);
 
@@ -139,9 +136,9 @@ void startAdv(void)
      https://developer.apple.com/library/content/qa/qa1931/_index.html
   */
   Bluefruit.Advertising.restartOnDisconnect(true);
-  Bluefruit.Advertising.setInterval(32, 244);    // in unit of 0.625 ms
-  Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
-  Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds
+  Bluefruit.Advertising.setInterval(32, 244); // in unit of 0.625 ms
+  Bluefruit.Advertising.setFastTimeout(30);   // number of seconds in fast mode
+  Bluefruit.Advertising.start(0);             // 0 = Don't stop advertising after n seconds
 }
 
 void loop()
@@ -154,16 +151,21 @@ void loop()
 
     uint8_t buf[64];
     int count = Serial.readBytes(buf, sizeof(buf));
-    bleuart.write( buf, count );
+    bleuart.write(buf, count);
   }
 
-  if(digitalRead(LEFT_BUTTON) == HIGH){
+  if (digitalRead(LEFT_BUTTON) == HIGH)
+  {
     left_button_state = false;
-  } else {
-    if(left_button_state){
+  }
+  else
+  {
+    if (left_button_state)
+    {
       Serial.println("Button clicked");
       current_color++;
-      if(current_color >= 7){
+      if (current_color >= 7)
+      {
         current_color = 0;
       }
       arcada.display->setTextColor(PIHOLE_COLORS[current_color]);
@@ -173,87 +175,100 @@ void loop()
   }
 
   // Forward from BLEUART to HW Serial
-  while ( bleuart.available() )
+  while (bleuart.available())
   {
     uint8_t ch;
     char cha = bleuart.read();
-    ch = (uint8_t) cha;
+    ch = (uint8_t)cha;
     Serial.write(ch);
     strncat(recvText, &cha, 1);
-    if (cha == '\n') {
+    if (cha == '\n')
+    {
       String text = String(recvText);
       int index = text.indexOf(';');
       numBlocked = text.substring(0, index);
       int newIndex = text.indexOf(';', index + 1);
-      numQueries = text.substring(index+1, newIndex);
+      numQueries = text.substring(index + 1, newIndex);
       index = newIndex;
       newIndex = text.indexOf(';', index + 1);
-      numBlockedToday = text.substring(index+1, newIndex);
+      numBlockedToday = text.substring(index + 1, newIndex);
       index = newIndex;
       newIndex = text.indexOf('\n', index + 1);
-      pctBlockedPercent = text.substring(index+1, newIndex);
+      pctBlockedPercent = text.substring(index + 1, newIndex);
       pctBlockedPercent += '%';
       redraw();
-      recvText[0]='\0';
+      recvText[0] = '\0';
     }
-
   }
 
   uint8_t gesture = apds.readGesture();
-  if (gesture == APDS9960_DOWN) Serial.println("v");
-  if (gesture == APDS9960_UP) Serial.println("^");
-  if (gesture == APDS9960_LEFT) Serial.println("<");
-  if (gesture == APDS9960_RIGHT) Serial.println(">");
+  if (gesture == APDS9960_DOWN)
+  {
+    Serial.println("DOWN");
+  }
+  if (gesture == APDS9960_UP)
+  {
+    Serial.println("UP");
+  }
+  if (gesture == APDS9960_LEFT)
+  {
+    Serial.println("LEFT");
+  }
+  if (gesture == APDS9960_RIGHT)
+  {
+    Serial.println("RIGHT");
+  }
 }
 
-void redraw(){
-      arcada.display->fillScreen(ARCADA_BLACK);
-      uint16_t w;
-      String domainsBlocked = "Domains Blocked";
-      String queriesToday = "Queries Today";
-      String blockedToday = "Ads Blocked Today";
-      String blockedPercent = "% Queries Blocked Today";
-      arcada.display->setTextSize(1);
-      arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 20);
-      arcada.display->println(domainsBlocked);
-      arcada.display->setTextSize(2);
-      arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 50);
-      arcada.display->println(numBlocked);
-      arcada.display->setTextSize(1);
-      arcada.display->getTextBounds(queriesToday, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 80);
-      arcada.display->println(queriesToday);
-      arcada.display->setTextSize(2);
-      arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 110);
-      arcada.display->println(numQueries);
-      arcada.display->setTextSize(1);
-      arcada.display->getTextBounds(blockedToday, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 140);
-      arcada.display->println(blockedToday);
-      arcada.display->setTextSize(2);
-      arcada.display->getTextBounds(numBlockedToday, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 170);
-      arcada.display->println(numBlockedToday);
-      arcada.display->setTextSize(1);
-      arcada.display->getTextBounds(blockedPercent, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 200);
-      arcada.display->println(blockedPercent);
-      arcada.display->setTextSize(2);
-      arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
-      arcada.display->setCursor(120-(w/2), 230);
-      arcada.display->println(pctBlockedPercent);
+void redraw()
+{
+  arcada.display->fillScreen(ARCADA_BLACK);
+  uint16_t w;
+  String domainsBlocked = "Domains Blocked";
+  String queriesToday = "Queries Today";
+  String blockedToday = "Ads Blocked Today";
+  String blockedPercent = "% Queries Blocked Today";
+  arcada.display->setTextSize(1);
+  arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 20);
+  arcada.display->println(domainsBlocked);
+  arcada.display->setTextSize(2);
+  arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 50);
+  arcada.display->println(numBlocked);
+  arcada.display->setTextSize(1);
+  arcada.display->getTextBounds(queriesToday, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 80);
+  arcada.display->println(queriesToday);
+  arcada.display->setTextSize(2);
+  arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 110);
+  arcada.display->println(numQueries);
+  arcada.display->setTextSize(1);
+  arcada.display->getTextBounds(blockedToday, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 140);
+  arcada.display->println(blockedToday);
+  arcada.display->setTextSize(2);
+  arcada.display->getTextBounds(numBlockedToday, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 170);
+  arcada.display->println(numBlockedToday);
+  arcada.display->setTextSize(1);
+  arcada.display->getTextBounds(blockedPercent, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 200);
+  arcada.display->println(blockedPercent);
+  arcada.display->setTextSize(2);
+  arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
+  arcada.display->setCursor(120 - (w / 2), 230);
+  arcada.display->println(pctBlockedPercent);
 }
 
 // callback invoked when central connects
 void connect_callback(uint16_t conn_handle)
 {
   // Get the reference to current connection
-  BLEConnection* connection = Bluefruit.Connection(conn_handle);
+  BLEConnection *connection = Bluefruit.Connection(conn_handle);
 
-  char central_name[32] = { 0 };
+  char central_name[32] = {0};
   connection->getPeerName(central_name, sizeof(central_name));
 
   Serial.print("Connected to ");
@@ -267,9 +282,10 @@ void connect_callback(uint16_t conn_handle)
 */
 void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 {
-  (void) conn_handle;
-  (void) reason;
+  (void)conn_handle;
+  (void)reason;
 
   Serial.println();
-  Serial.print("Disconnected, reason = 0x"); Serial.println(reason, HEX);
+  Serial.print("Disconnected, reason = 0x");
+  Serial.println(reason, HEX);
 }
