@@ -161,7 +161,7 @@ void loop()
     Serial.write(ch);
     recvText.concat(ch);
     if (cha == '\n') {
-      int index = recvText.indexOf(';');
+      int index = recvText.indexOf(";");
       String numBlocked = recvText.substring(0, index);
       arcada.display->fillScreen(ARCADA_BLACK);
       arcada.display->setCursor(0, 40);
