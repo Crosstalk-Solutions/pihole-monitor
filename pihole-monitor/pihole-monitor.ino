@@ -161,15 +161,20 @@ void loop()
     Serial.write(ch);
     strncat(recvText, &cha, 1);
     if (cha == '\n') {
+      char *strings[4]; // an array of pointers to the pieces of the above array after strtok()
+      char *ptr = NULL;
+      ptr = strtok(array, ";");  // delimiter
+      while (ptr != NULL)
+      {
+          strings[index] = ptr;
+          index++;
+          ptr = strtok(NULL, ";");
+      }
+
       arcada.display->fillScreen(ARCADA_BLACK);
       arcada.display->setCursor(0, 40);
-      String text = String(recvText);
-      text = text.substring(0, text.indexOf(';'));
-      arcada.display->println(text);
-      text = String(recvText);
-      text = text.substring(text.indexOf(';')+1);
-      text = text.substring(0, text.indexOf(';'));
-      arcada.display->println(text);
+      arcada.display->println("Blocked Domains");
+      arcada.display->println(strings[0]);
       recvText[0]='\0';
     }
   }
