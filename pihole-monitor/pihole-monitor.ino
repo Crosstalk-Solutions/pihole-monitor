@@ -215,9 +215,9 @@ void loop()
   {
     Serial.println("DOWN"); // ACTUALLY RIGHT
     current_screen++;
-    if (current_screen > 1)
+    if (current_screen > 2)
     {
-      current_screen = 1;
+      current_screen = 2;
     }
     redraw();
   }
@@ -296,25 +296,58 @@ void redraw()
     arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
     arcada.display->setCursor(120 - (w / 2), 20);
     arcada.display->println(queriesOverTime);
-    int n = sizeof(domains_over_time)/sizeof(int);
+    int n = sizeof(domains_over_time) / sizeof(int);
     Serial.println(n);
     float largest = -1.0;
     for (int i = 0; i < n; i++)
     {
       if (largest < domains_over_time[i])
       {
-        largest = domains_over_time[i]*1.0;
+        largest = domains_over_time[i] * 1.0;
       }
     }
     Serial.println(largest);
-    for(int i = 0; i < n; i++){
-      int len = 200*(domains_over_time[i] / largest);
-      arcada.display->drawFastVLine(i, 239-len, len, PIHOLE_COLORS[current_color]);
+    for (int i = 0; i < n; i++)
+    {
+      int len = 200 * (domains_over_time[i] / largest);
+      arcada.display->drawFastVLine(i, 239 - len, len, PIHOLE_COLORS[current_color]);
     }
     arcada.display->setCursor(0, 40);
     arcada.display->println(int(largest));
-    arcada.display->setCursor(0,239);
+    arcada.display->setCursor(0, 239);
     arcada.display->println("0");
+    break;
+  }
+  case 2:
+  {
+    arcada.display->fillScreen(ARCADA_BLACK);
+    uint16_t w;
+    String adsOverTime = "Ads Blocked Over Time";
+    arcada.display->setTextSize(1);
+    arcada.display->getTextBounds(adsOverTime, 0, 0, NULL, NULL, &w, NULL);
+    arcada.display->setCursor(120 - (w / 2), 20);
+    arcada.display->println(adsOverTime);
+    int n = sizeof(ads_over_time) / sizeof(int);
+    Serial.println(n);
+    float largest = -1.0;
+    for (int i = 0; i < n; i++)
+    {
+      if (largest < ads_over_time[i])
+      {
+        largest = ads_over_time[i] * 1.0;
+      }
+    }
+    Serial.println(largest);
+    for (int i = 0; i < n; i++)
+    {
+      int len = 200 * (ads_over_time[i] / largest);
+      arcada.display->drawFastVLine(i, 239 - len, len, PIHOLE_COLORS[current_color]);
+    }
+    arcada.display->setCursor(0, 40);
+    arcada.display->println(int(largest));
+    arcada.display->setCursor(0, 239);
+    arcada.display->println("0");
+    break;
     break;
   }
   }
