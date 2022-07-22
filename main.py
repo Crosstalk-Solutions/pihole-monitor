@@ -44,7 +44,7 @@ async def uart_terminal():
 
         return False
 
-    device = "DE:B2:A6:D9:A3:DF"
+    device = "00:00:00:00:00:00"
 
     def handle_disconnect(_: BleakClient):
         print("Device was disconnected, goodbye.")

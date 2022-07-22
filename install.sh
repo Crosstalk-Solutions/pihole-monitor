@@ -67,6 +67,12 @@ echo -e "\xE2\x9C\x94 Compiled sketch"
 echo -e "Uploading to CLUE"
 arduino-cli upload -b adafruit:nrf52:cluenrf52840 -p /dev/ttyACM0 pihole-monitor/
 
+sleep 5
+read -r line < /dev/ttyACM0
+echo "Read MAC Address: $line"
+
+sed -i "s/00:00:00:00:00:00/$line/" main.py
+
 echo -e "Installing service"
 sed -i "s/USERNAME/${USER}/" pihole-monitor.service
 sed -i "s:FILE:${INITIAL_PATH}/main.py:" pihole-monitor.service
