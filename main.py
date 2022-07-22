@@ -60,7 +60,6 @@ async def uart_terminal():
             # This waits until you type a line and press ENTER.
             # A real terminal program might put stdin in raw mode so that things
             # like CTRL+C get passed to the remote device.
-            time.sleep(10)
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
             parse = json.loads(fetched)
             data = "%s;%s;%s;%s" % (parse["domains_being_blocked"], parse["dns_queries_today"], parse["ads_blocked_today"], parse["ads_percentage_today"])
@@ -77,6 +76,7 @@ async def uart_terminal():
 
             await client.write_gatt_char(UART_RX_CHAR_UUID, data)
             print("sent:", data)
+            time.sleep(10)
 
 
 if __name__ == "__main__":
