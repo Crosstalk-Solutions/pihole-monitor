@@ -38,11 +38,15 @@ echo "Installing Python dependencies"
 spinner pip3 install bleak adafruit-nrfutil
 echo -e "\xE2\x9C\x94 Installed Python dependencies"
 
+export PATH="$HOME/.local/bin:$PATH"
+
 echo "Adafruit NRFUtil Version"
 adafruit-nrfutil version
 
+export PATH="$HOME/.local/bin:$PATH"
+
 echo "Installing Arduino CLI"
-spinner curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
 echo -e "\xE2\x9C\x94 Installed Arduino CLI"
 
 export PATH="$HOME/.local/bin:$PATH"
