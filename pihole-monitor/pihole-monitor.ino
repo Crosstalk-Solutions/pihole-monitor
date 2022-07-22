@@ -166,7 +166,9 @@ void loop()
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
+      arcada.display->setTextSize(0.5);
       arcada.display->println("Domains Blocked");
+      arcada.display->setTextSize(1);
       arcada.display->println(numBlocked);
       recvText[0]='\0';
     }
