@@ -101,7 +101,7 @@ void setup()
   // Turn on backlight
   arcada.setBacklight(255);
   arcada.display->fillScreen(ARCADA_BLACK);
-  arcada.display->setCursor(0, 40);
+  arcada.display->setCursor(0, 10);
   arcada.display->setTextColor(ARCADA_GREEN);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
@@ -162,12 +162,13 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n') {
       arcada.display->fillScreen(ARCADA_BLACK);
-      arcada.display->setCursor(0, 40);
+      arcada.display->setCursor(0, 10);
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
       arcada.display->setTextSize(1);
       arcada.display->println("Domains Blocked");
+      arcada.display->setCursor(0, 30);
       arcada.display->setTextSize(2);
       arcada.display->println(numBlocked);
       recvText[0]='\0';
