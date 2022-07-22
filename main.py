@@ -77,8 +77,8 @@ async def uart_terminal():
             parse = json.loads(fetched)
             domains_over_time = list(parse['domains_over_time'].values())
             ads_over_time = list(parse['ads_over_time'].values())
-            small['domains_over_time'] = domains_over_time
-            new['ads_over_time'] = ads_over_time
+            small['dot'] = domains_over_time
+            small['aot'] = ads_over_time
             data = json.dumps(small, separators=(',', ':'))
             print(data)
             data += '\n'
