@@ -28,10 +28,10 @@ bool left_button_state = false;
 
 const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
-String numBlocked = "0";
-String numQueries = "0";
-String numBlockedToday = "0";
-String pctBlockedPercent = "0.0%";
+char* numBlocked = "0";
+char* numQueries = "0";
+char* numBlockedToday = "0";
+char* pctBlockedPercent = "0.0%";
 
 #define BLACK 0x0000
 
