@@ -22,6 +22,7 @@
 const int LEFT_BUTTON = 5;
 
 int current_color = 0;
+int current_screen = 0;
 
 bool left_button_state = false;
 
@@ -202,64 +203,83 @@ void loop()
   }
 
   uint8_t gesture = apds.readGesture();
+  // Directions are wrong due to sensor orientation
   if (gesture == APDS9960_DOWN)
   {
-    Serial.println("DOWN");
+    Serial.println("DOWN"); // ACTUALLY RIGHT
+    current_screen++;
+    redraw();
   }
   if (gesture == APDS9960_UP)
   {
-    Serial.println("UP");
+    Serial.println("UP"); // ACTUALLY LEFT
+    current_screen--;
+    redraw();
   }
   if (gesture == APDS9960_LEFT)
   {
-    Serial.println("LEFT");
+    Serial.println("LEFT"); // ACTUALLY DOWN
   }
   if (gesture == APDS9960_RIGHT)
   {
-    Serial.println("RIGHT");
+    Serial.println("RIGHT"); // ACTUALLY UP
   }
 }
 
 void redraw()
 {
-  arcada.display->fillScreen(ARCADA_BLACK);
-  uint16_t w;
-  String domainsBlocked = "Domains Blocked";
-  String queriesToday = "Queries Today";
-  String blockedToday = "Ads Blocked Today";
-  String blockedPercent = "% Queries Blocked Today";
-  arcada.display->setTextSize(1);
-  arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 20);
-  arcada.display->println(domainsBlocked);
-  arcada.display->setTextSize(2);
-  arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 50);
-  arcada.display->println(numBlocked);
-  arcada.display->setTextSize(1);
-  arcada.display->getTextBounds(queriesToday, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 80);
-  arcada.display->println(queriesToday);
-  arcada.display->setTextSize(2);
-  arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 110);
-  arcada.display->println(numQueries);
-  arcada.display->setTextSize(1);
-  arcada.display->getTextBounds(blockedToday, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 140);
-  arcada.display->println(blockedToday);
-  arcada.display->setTextSize(2);
-  arcada.display->getTextBounds(numBlockedToday, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 170);
-  arcada.display->println(numBlockedToday);
-  arcada.display->setTextSize(1);
-  arcada.display->getTextBounds(blockedPercent, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 200);
-  arcada.display->println(blockedPercent);
-  arcada.display->setTextSize(2);
-  arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
-  arcada.display->setCursor(120 - (w / 2), 230);
-  arcada.display->println(pctBlockedPercent);
+  switch
+    current_screen
+    {
+    case 0:
+      arcada.display->fillScreen(ARCADA_BLACK);
+      uint16_t w;
+      String domainsBlocked = "Domains Blocked";
+      String queriesToday = "Queries Today";
+      String blockedToday = "Ads Blocked Today";
+      String blockedPercent = "% Queries Blocked Today";
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 20);
+      arcada.display->println(domainsBlocked);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 50);
+      arcada.display->println(numBlocked);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(queriesToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 80);
+      arcada.display->println(queriesToday);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 110);
+      arcada.display->println(numQueries);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(blockedToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 140);
+      arcada.display->println(blockedToday);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(numBlockedToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 170);
+      arcada.display->println(numBlockedToday);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(blockedPercent, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 200);
+      arcada.display->println(blockedPercent);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 230);
+      arcada.display->println(pctBlockedPercent);
+      break;
+    case 1:
+      arcada.display->fillScreen(ARCADA_BLACK);
+      String queriesOverTime = "Domain Queries Over Time";
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120 - (w / 2), 20);
+      arcada.display->println(queriesOverTime);
+      break;
+    }
 }
 
 // callback invoked when central connects
