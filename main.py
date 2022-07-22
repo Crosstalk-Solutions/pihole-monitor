@@ -86,7 +86,7 @@ async def uart_terminal():
 
             data = chunks(data, 10)
 
-            for chunk in chunks:
+            for chunk in data:
                 print(chunk)
                 await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
 
