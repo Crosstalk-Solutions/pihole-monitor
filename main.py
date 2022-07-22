@@ -83,9 +83,10 @@ async def uart_terminal():
             # line endings (uncomment line below if needed)
             # data = data.replace(b"\n", b"\r\n")
 
-            data = chunks(data, UART_SAFE_SIZE)
+            data = chunks(data, 10)
 
             for chunk in chunks:
+                print(chunk)
                 await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
 
             print("sent:", data)
