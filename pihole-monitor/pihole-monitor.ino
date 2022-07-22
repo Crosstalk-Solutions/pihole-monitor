@@ -188,10 +188,10 @@ void loop()
     {
       StaticJsonDocument<3072> doc;
       deserializeJson(doc, recvText);
-      numBlocked = String(doc["domains_being_blocked"]);
-      numQueries = String(doc["dns_queries_today"]);
-      numBlockedToday = String(doc["ads_blocked_today"]);
-      pctBlockedPercent = String(doc["ads_percentage_today"]);
+      numBlocked = doc["domains_being_blocked"];
+      numQueries = doc["dns_queries_today"];
+      numBlockedToday = doc["ads_blocked_today"];
+      pctBlockedPercent = doc["ads_percentage_today"];
       pctBlockedPercent += '%';
       redraw();
       recvText[0] = '\0';
