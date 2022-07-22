@@ -84,7 +84,7 @@ async def uart_terminal():
             # line endings (uncomment line below if needed)
             # data = data.replace(b"\n", b"\r\n")
 
-            data = chunks(data, 10)
+            data = chunks(data, UART_SAFE_SIZE)
 
             for chunk in data:
                 print(chunk)
