@@ -18,14 +18,14 @@
 #include <Fonts/FreeSansOblique9pt7b.h>
 
 // Color definitions
+
+const int LEFT_BUTTON = 5;
+
+int color = 0;
+
+const char COLORS[] ={0x001F,0xF800,0x07E0,0x7FF,0xF81Fm9xFFE0,0xFFFF};
+
 #define BLACK    0x0000
-#define BLUE     0x001F
-#define RED      0xF800
-#define GREEN    0x07E0
-#define CYAN     0x07FF
-#define MAGENTA  0xF81F
-#define YELLOW   0xFFE0
-#define WHITE    0xFFFF
 
 // BLE Service
 BLEDfu  bledfu;  // OTA DFU service
@@ -150,6 +150,11 @@ void loop()
     uint8_t buf[64];
     int count = Serial.readBytes(buf, sizeof(buf));
     bleuart.write( buf, count );
+  }
+
+  if(digitalRead(LEFT_BUTTON)== HIGH){
+    color++;
+    arcada.display->setTextColor(COLORS[color]);
   }
 
   // Forward from BLEUART to HW Serial
