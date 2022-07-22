@@ -169,7 +169,9 @@ void loop()
       index = newIndex;
       newIndex = text.indexOf(';', index + 1);
       String numBlockedToday = text.substring(index+1, newIndex);
-      String pctBlockedPercent = text.substring(newIndex+1);
+      index = newIndex;
+      newIndex = text.indexOf('\n', index + 1);
+      String pctBlockedPercent = text.substring(index+1, newIndex);
       pctBlockedPercent += '%';
       arcada.display->fillScreen(ARCADA_BLACK);
       uint16_t w;
