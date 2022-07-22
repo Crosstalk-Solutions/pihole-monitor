@@ -58,21 +58,7 @@ char recvText[1] = "";
 void setup()
 {
   Serial.begin(115200);
-  uint32_t addr_high = ((MAC_ADDRESS_HIGH)&0x0000ffff) | 0x0000c000;
-  uint32_t addr_low = MAC_ADDRESS_LOW;
-  Serial.print((addr_high >> 8) & 0xFF, HEX);
-  Serial.print(":");
-  Serial.print((addr_high)&0xFF, HEX);
-  Serial.print(":");
-  Serial.print((addr_low >> 24) & 0xFF, HEX);
-  Serial.print(":");
-  Serial.print((addr_low >> 16) & 0xFF, HEX);
-  Serial.print(":");
-  Serial.print((addr_low >> 8) & 0xFF, HEX);
-  Serial.print(":");
-  Serial.print((addr_low)&0xFF, HEX);
-  Serial.println("");
-
+  
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
 
@@ -120,7 +106,10 @@ void startAdv(void)
 
 void loop()
 {
-
+  if(!Bluefruit.connected())
+  {
+    printMAC();
+  }
   if (digitalRead(LEFT_BUTTON) == HIGH)
   {
     left_button_state = false;
@@ -202,6 +191,23 @@ void loop()
   {
     Serial.println("RIGHT"); // ACTUALLY UP
   }
+}
+
+void printMAC(){
+  uint32_t addr_high = ((MAC_ADDRESS_HIGH)&0x0000ffff) | 0x0000c000;
+  uint32_t addr_low = MAC_ADDRESS_LOW;
+  Serial.print((addr_high >> 8) & 0xFF, HEX);
+  Serial.print(":");
+  Serial.print((addr_high)&0xFF, HEX);
+  Serial.print(":");
+  Serial.print((addr_low >> 24) & 0xFF, HEX);
+  Serial.print(":");
+  Serial.print((addr_low >> 16) & 0xFF, HEX);
+  Serial.print(":");
+  Serial.print((addr_low >> 8) & 0xFF, HEX);
+  Serial.print(":");
+  Serial.print((addr_low)&0xFF, HEX);
+  Serial.println("");
 }
 
 void redraw()
