@@ -203,7 +203,6 @@ void loop()
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
-      free(doc);
       recvText[0] = '\0';
     }
   }
