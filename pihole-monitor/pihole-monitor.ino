@@ -163,7 +163,7 @@ void loop()
     if (cha == '\n') {
       char *strings[4]; // an array of pointers to the pieces of the above array after strtok()
       char *ptr = NULL;
-      ptr = strtok(array, ";");  // delimiter
+      ptr = strtok(recvText, ";");  // delimiter
       while (ptr != NULL)
       {
           strings[index] = ptr;
