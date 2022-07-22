@@ -67,3 +67,7 @@ echo -e "\xE2\x9C\x94 Compiled sketch"
 echo -e "Uploading to CLUE"
 arduino-cli upload -b adafruit:nrf52:cluenrf52840 -p /dev/ttyACM0 pihole-monitor/
 
+echo -e "Installing service"
+sed -i "s/USERNAME/${USER}/" pihole-monitor.service
+sed -i "s:FILE:${INITIAL_PATH}/main.py:" pihole-monitor.service
+sudo cp pihole-monitor.service /etc/systemd/system/

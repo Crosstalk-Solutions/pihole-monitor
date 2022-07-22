@@ -1,0 +1,14 @@
+[Unit]
+Description=PiHole Monitor Bluetooth service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=USERNAME
+ExecStart=/usr/bin/python3 FILE
+
+[Install]
+WantedBy=multi-user.target
