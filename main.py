@@ -69,16 +69,16 @@ async def uart_terminal():
             small = dict()
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
             parse = json.loads(fetched)
-            small["domains_being_blocked"] = parse["domains_being_blocked"]
-            small["dns_queries_today"] = parse["dns_queries_today"]
-            small["ads_blocked_today"] = parse["ads_blocked_today"]
-            small["ads_percentage_today"] = parse["ads_percentage_today"]
+            small["dbb"] = parse["domains_being_blocked"]
+            small["dqt"] = parse["dns_queries_today"]
+            small["abt"] = parse["ads_blocked_today"]
+            small["apt"] = parse["ads_percentage_today"]
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
             parse = json.loads(fetched)
             domains_over_time = list(parse['domains_over_time'].values())
             ads_over_time = list(parse['ads_over_time'].values())
             small['domains_over_time'] = domains_over_time
-            # new['ads_over_time'] = ads_over_time
+            new['ads_over_time'] = ads_over_time
             data = json.dumps(small, separators=(',', ':'))
             print(data)
             data += '\n'

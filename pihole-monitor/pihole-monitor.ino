@@ -199,10 +199,10 @@ void loop()
       free(numQueries);
       free(numBlockedToday);
       free(pctBlockedPercent);
-      numBlocked = strdup(doc["domains_being_blocked"]);
-      numQueries = strdup(doc["dns_queries_today"]);
-      numBlockedToday = strdup(doc["ads_blocked_today"]);
-      pctBlockedPercent = strdup(doc["ads_percentage_today"]);
+      numBlocked = strdup(doc["dbb"]);
+      numQueries = strdup(doc["dqt"]);
+      numBlockedToday = strdup(doc["abt"]);
+      pctBlockedPercent = strdup(doc["apt"]);
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
