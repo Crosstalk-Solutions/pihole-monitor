@@ -1,42 +1,69 @@
+chmod +x spinner
+cp spinner /usr/local/bin
+
 INITIAL_PATH=$(pwd)
 
 cd ~
 
-wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
+echo "Downloading bluez"
+spinner wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
+echo -e "\xE2\x9C\x94 Downloaded bluez"
 
-tar xvf bluez-5.64.tar.xz
+echo "Unzipping bluez"
+spinner tar xvf bluez-5.64.tar.xz
+echo -e "\xE2\x9C\x94 Unzipped bluez"
 
-sudo apt-get install libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev docutils-common python3-pip libfl2 -y
+echo "Installing dependencies"
+spinner sudo apt-get install libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev docutils-common python3-pip libfl2 -y
+echo -e "\xE2\x9C\x94 Installed dependencies"
 
 cd bluez-5.64
-
 export LDFLAGS=-lrt
 
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library -disable-systemd
+echo "Configuring bluez"
+spinner ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library -disable-systemd
+echo -e "\xE2\x9C\x94 Configured bluez"
 
-make
+echo "Building bluez"
+spinner make
+echo -e "\xE2\x9C\x94 Built bluez"
 
-sudo make install
+echo "Installing bluez"
+spinner sudo make install
+echo -e "\xE2\x9C\x94 Installed bluez"
 
 cd $INITIAL_PATH
 
-pip3 install bleak adafruit-nrfutil
+echo "Installing Python dependencies"
+spinner pip3 install bleak adafruit-nrfutil
+echo -e "\xE2\x9C\x94 Installed Python dependencies"
 
-curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
+echo "Adafruit NRFUtil Version"
+adafruit-nrfutil version
+
+echo "Installing Arduino CLI"
+spinner curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/.local/bin sh
+echo -e "\xE2\x9C\x94 Installed Arduino CLI"
 
 export PATH="$HOME/.local/bin:$PATH"
 
-arduino-cli config init
+echo "Configuring Arduino CLI"
+spinner arduino-cli config init
+spinner arduino-cli config set board_manager.additional_urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+echo -e "\xE2\x9C\x94 Configured Arduino CLI"
 
-arduino-cli config set board_manager.additional_urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+echo "Installing Arduino board"
+spinner arduino-cli core install adafruit:nrf52
+echo -e "\xE2\x9C\x94 Installed Arduino board"
 
-adafruit-nrfutil version
+echo "Installing Arduino libraries"
+spinner arduino-cli lib install "Adafruit Arcada Library"
+echo -e "\xE2\x9C\x94 Installed Arduino libraries"
 
-arduino-cli core install adafruit:nrf52
+echo "Compiling sketch"
+spinner arduino-cli compile -b adafruit:nrf52:cluenrf52840 pihole-monitor/
+echo -e "\xE2\x9C\x94 Compiled sketch"
 
-arduino-cli lib install "Adafruit Arcada Library"
-
-arduino-cli compile -b adafruit:nrf52:cluenrf52840 pihole-monitor/
-
+echo -e "Uploading to CLUE"
 arduino-cli upload -b adafruit:nrf52:cluenrf52840 -p /dev/ttyACM0 pihole-monitor/
 
