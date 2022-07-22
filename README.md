@@ -5,7 +5,7 @@ This is a simple desk toy / monitor for a [Pi-Hole](https://pi-hole.net) install
 
 ## Installation
 
-1. [Install Pi-Hole](https://github.com/pi-hole/pi-hole/#one-step-automated-install). The installation script for this Pi-Hole Monitor has been tested on Raspberry Pi OS (64-bit) Lite. Other versions may work but have not been validated.
+1. [Install Pi-Hole](https://github.com/pi-hole/pi-hole/#one-step-automated-install). The installation script for this Pi-Hole Monitor has been tested on [Raspberry Pi OS (64-bit) Lite](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit). Other versions may work but have not been validated.
 2. Clone this repository! You do not need to be root.
 ```sh
 git clone https://github.com/crosstalk-solutions/pihole-monitor.git
