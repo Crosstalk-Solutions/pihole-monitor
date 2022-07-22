@@ -1,5 +1,5 @@
 chmod +x spinner
-sudo cp spinner /usr/local/bin
+sudo cp spinner /usr/local/bin/
 
 INITIAL_PATH=$(pwd)
 
