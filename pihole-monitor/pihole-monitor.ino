@@ -187,7 +187,14 @@ void loop()
     if (cha == '\n')
     {
       StaticJsonDocument<768> doc;
-      deserializeJson(doc, recvText);
+      DeserializationError error = deserializeJson(doc, recvText);
+
+      if (error)
+      {
+        Serial.print("deserializeJson() failed: ");
+        Serial.println(error.c_str());
+        return;
+      }
       free(numBlocked);
       free(numQueries);
       free(numBlockedToday);
