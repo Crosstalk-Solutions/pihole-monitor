@@ -105,7 +105,7 @@ void setup()
   arcada.display->setTextColor(ARCADA_GREEN);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
-  arcada.display->setFont(&FreeSansOblique18pt7b);
+  arcada.display->setFont(&FreeSansOblique9pt7b);
 
   Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
   Serial.println("Once connected, enter character(s) that you wish to send");
