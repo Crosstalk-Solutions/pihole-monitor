@@ -19,8 +19,8 @@ function spinner() {
 
   local pid=$1 # Process Id of the previous running command
 
-  local spin='⣾⣽⣻⢿⡿⣟⣯⣷'
-  local charwidth=3
+  local spin='-\|/'
+  local charwidth=1
 
   local i=0
   tput civis # cursor invisible
