@@ -14,12 +14,8 @@ git clone https://github.com/crosstalk-solutions/pihole-monitor.git
 ```sh
 cd pihole-monitor
 ```
-4. Make the install script executable
-```sh
-chmod +x install.sh
-```
-5. Plug in your CLUE! Connect it (with a USB cable) to your Raspberry Pi. The install script will automatically compile and upload firmware to the CLUE.
-6. Run the install script
+4. Plug in your CLUE! Connect it (with a USB cable) to your Raspberry Pi. The install script will automatically compile and upload firmware to the CLUE.
+5. Run the install script
 ```sh
 ./install.sh
 ```
