@@ -165,7 +165,7 @@ void loop()
       if(color >= 7){
         current_color = 0;
       }
-      arcada.display->setTextColor(PIHOLE_COLORS[color]);
+      arcada.display->setTextColor(PIHOLE_COLORS[current_color]);
       redraw();
     }
     left_button_state = true;
