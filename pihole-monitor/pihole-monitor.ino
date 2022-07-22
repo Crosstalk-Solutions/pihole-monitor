@@ -305,13 +305,13 @@ void redraw()
     int largest = -1;
     for (int i = 0; i < n; i++)
     {
-      if (largest < domains_over_time[i])
+      if (largest < domains_over_time[i].as<int>())
       {
-        largest = domains_over_time[i];
+        largest = domains_over_time[i].as<int>();
       }
     }
     for(int i = 0; i < n; i++){
-      arcada.display->drawFastVLine(i, 240, 200*(domains_over_time[i]/largest), PIHOLE_COLORS[current_color]);
+      arcada.display->drawFastVLine(i, 240, 200*(domains_over_time[i].as<int>() / largest), PIHOLE_COLORS[current_color]);
     }
     break;
   }
