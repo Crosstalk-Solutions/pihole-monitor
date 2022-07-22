@@ -306,7 +306,8 @@ void redraw()
     }
     Serial.println(largest);
     for(int i = 0; i < n; i++){
-      arcada.display->drawFastVLine(i, 240, 200*(domains_over_time[i].as<int>() / largest), PIHOLE_COLORS[current_color]);
+      int len = 200*(domains_over_time[i].as<int>() / largest);
+      arcada.display->drawFastVLine(i, 240-len, len, PIHOLE_COLORS[current_color]);
     }
     break;
   }
