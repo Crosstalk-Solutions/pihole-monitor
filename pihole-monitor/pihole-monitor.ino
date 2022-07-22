@@ -32,6 +32,8 @@ char *numBlocked = strdup("0");
 char *numQueries = strdup("0");
 char *numBlockedToday = strdup("0");
 char *pctBlockedPercent = strdup("0.0%");
+JsonArray domains_over_time;
+JsonArray ads_over_time;
 
 #define BLACK 0x0000
 
@@ -203,6 +205,8 @@ void loop()
       numQueries = strdup(doc["dqt"]);
       numBlockedToday = strdup(doc["abt"]);
       pctBlockedPercent = strdup(doc["apt"]);
+      domains_over_time = doc["dot"];
+      ads_over_time = doc["aot"];
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
@@ -216,7 +220,7 @@ void loop()
   {
     Serial.println("DOWN"); // ACTUALLY RIGHT
     current_screen++;
-    if(current_screen > 1)
+    if (current_screen > 1)
     {
       current_screen = 1;
     }
@@ -297,6 +301,18 @@ void redraw()
     arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
     arcada.display->setCursor(120 - (w / 2), 20);
     arcada.display->println(queriesOverTime);
+    int n = sizeof(domains_over_time) / sizeof(domains_over_time[0]);
+    int largest = -1;
+    for (int i = 0; i < n; i++)
+    {
+      if (largest < domains_over_time[i])
+      {
+        largest = domains_over_time[i];
+      }
+    }
+    for(int i = 0; i < n; i++){
+      arcada.display->drawFastVLine(i, 240, 200*(domains_over_time[i]/largest), PIHOLE_COLORS[current_color]);
+    }
     break;
   }
   }
