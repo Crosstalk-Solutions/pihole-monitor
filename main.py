@@ -66,20 +66,20 @@ async def uart_terminal():
             # This waits until you type a line and press ENTER.
             # A real terminal program might put stdin in raw mode so that things
             # like CTRL+C get passed to the remote device.
-            new = {}
+            small = dict()
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
             parse = json.loads(fetched)
-            new["domains_being_blocked"] = parse["domains_being_blocked"]
-            new["dns_queries_today"] = parse["dns_queries_today"]
-            new["ads_blocked_today"] = parse["ads_blocked_today"]
-            new["ads_percentage_today"] = parse["ads_percentage_today"]
+            small["domains_being_blocked"] = parse["domains_being_blocked"]
+            small["dns_queries_today"] = parse["dns_queries_today"]
+            small["ads_blocked_today"] = parse["ads_blocked_today"]
+            small["ads_percentage_today"] = parse["ads_percentage_today"]
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
             parse = json.loads(fetched)
             domains_over_time = list(parse2['domains_over_time'].values())
             ads_over_time = list(parse2['ads_over_time'].values())
-            new['domains_over_time'] = domains_over_time
+            small['domains_over_time'] = domains_over_time
             # new['ads_over_time'] = ads_over_time
-            data = json.dumps(new, separators=(',', ':'))
+            data = json.dumps(small, separators=(',', ':'))
             print(data)
             data += '\n'
             data = str.encode(data)
