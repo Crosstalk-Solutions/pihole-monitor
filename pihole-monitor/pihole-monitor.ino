@@ -161,6 +161,7 @@ void loop()
     left_button_state = false;
   } else {
     if(left_button_state){
+      Serial.println("Button clicked");
       current_color++;
       if(current_color >= 7){
         current_color = 0;
@@ -203,7 +204,6 @@ void loop()
   if (gesture == APDS9960_UP) Serial.println("^");
   if (gesture == APDS9960_LEFT) Serial.println("<");
   if (gesture == APDS9960_RIGHT) Serial.println(">");
-  Serial.println("Loop");
 }
 
 void redraw(){
