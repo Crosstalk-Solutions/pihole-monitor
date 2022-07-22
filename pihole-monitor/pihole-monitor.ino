@@ -165,16 +165,16 @@ void loop()
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
-      arcada.display->setTextSize(1);
       // X value is determined by: char length 120-((c * 9)/2) 
-      String domainsBlocked = "Domains Blocked";
       uint16_t w;
+      String domainsBlocked = "Domains Blocked";
+      arcada.display->setTextSize(1);
       arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 20);
       arcada.display->println(domainsBlocked);
+      arcada.display->setTextSize(2);
       arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 50);
-      arcada.display->setTextSize(2);
       arcada.display->println(numBlocked);
       recvText[0]='\0';
     }
