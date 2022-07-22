@@ -203,6 +203,7 @@ void loop()
   if (gesture == APDS9960_UP) Serial.println("^");
   if (gesture == APDS9960_LEFT) Serial.println("<");
   if (gesture == APDS9960_RIGHT) Serial.println(">");
+  Serial.println("Loop");
 }
 
 void redraw(){
