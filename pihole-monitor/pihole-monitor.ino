@@ -44,6 +44,7 @@ BLEBas blebas;   // battery
 Adafruit_Arcada arcada;
 
 #include "Adafruit_APDS9960.h"
+#include <ArduinoJson.h>
 Adafruit_APDS9960 apds;
 
 char recvText[1] = "";
@@ -185,17 +186,12 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
-      String text = String(recvText);
-      int index = text.indexOf(';');
-      numBlocked = text.substring(0, index);
-      int newIndex = text.indexOf(';', index + 1);
-      numQueries = text.substring(index + 1, newIndex);
-      index = newIndex;
-      newIndex = text.indexOf(';', index + 1);
-      numBlockedToday = text.substring(index + 1, newIndex);
-      index = newIndex;
-      newIndex = text.indexOf('\n', index + 1);
-      pctBlockedPercent = text.substring(index + 1, newIndex);
+      StaticJsonDocument<3072> doc;
+      deserializeJson(doc, recvText);
+      numBlocked = String(doc["domains_being_blocked"]);
+      numQueries = String(doc["dns_queries_today"]);
+      numBlockedToday = String(doc["ads_blocked_today"]);
+      pctBlockedPercent = String(doc["ads_percentage_today"]);
       pctBlockedPercent += '%';
       redraw();
       recvText[0] = '\0';
@@ -276,7 +272,7 @@ void redraw()
   {
     arcada.display->fillScreen(ARCADA_BLACK);
     uint16_t w;
-    String queriesOverTime = "Domain Queries Over Time";
+    String queriesOverTime = "Queries Over Time";
     arcada.display->setTextSize(1);
     arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
     arcada.display->setCursor(120 - (w / 2), 20);

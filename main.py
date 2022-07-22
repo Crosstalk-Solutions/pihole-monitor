@@ -62,10 +62,13 @@ async def uart_terminal():
             # like CTRL+C get passed to the remote device.
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
             parse = json.loads(fetched)
-            data = "%s;%s;%s;%s" % (parse["domains_being_blocked"], parse["dns_queries_today"], parse["ads_blocked_today"], parse["ads_percentage_today"])
+            fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
+            parse2 = json.loads(fetched)
+            parse['domains_over_time'] = parse2['domains_over_time']
+            parse['ads_over_time'] = parse2['ads_over_time']
+            data = json.dumps(parse)
             data += '\n'
             data = str.encode(data)
-            print(data)
             # data will be empty on EOF (e.g. CTRL+D on *nix)
             if not data:
                 break
@@ -75,6 +78,7 @@ async def uart_terminal():
             # data = data.replace(b"\n", b"\r\n")
 
             await client.write_gatt_char(UART_RX_CHAR_UUID, data)
+
             print("sent:", data)
             time.sleep(10)
 
