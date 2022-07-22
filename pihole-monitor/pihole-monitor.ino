@@ -25,7 +25,7 @@ int color = 0;
 
 bool left_button_state = false;
 
-const int COLORS[] ={0xFFFF,0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0};
+const int PIHOLE_COLORS[] ={0xFFFF,0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0};
 
 String numBlocked = "0";
 String numQueries = "0";
@@ -109,7 +109,7 @@ void setup()
   arcada.setBacklight(255);
   arcada.display->fillScreen(ARCADA_BLACK);
   arcada.display->setCursor(0, 10);
-  arcada.display->setTextColor(COLORS[0]);
+  arcada.display->setTextColor(PIHOLE_COLORS[0]);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
   arcada.display->setFont(&FreeSansOblique9pt7b);
@@ -163,10 +163,10 @@ void loop()
   } else {
     if(left_button_state){
       color++;
-      if(color >= sizeof(COLORS)){
+      if(color >= sizeof(PIHOLE_COLORS)){
         color = 0;
       }
-      arcada.display->setTextColor(COLORS[color]);
+      arcada.display->setTextColor(PIHOLE_COLORS[color]);
       redraw();
     }
     left_button_state = true;
