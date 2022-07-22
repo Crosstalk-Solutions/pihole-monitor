@@ -61,9 +61,9 @@ async def uart_terminal():
             # A real terminal program might put stdin in raw mode so that things
             # like CTRL+C get passed to the remote device.
             time.sleep(10)
-            fetched = urllib.request.urlopen("http://localhost/admin/api.php?summaryRaw").read()
+            fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
             parse = json.loads(fetched)
-            data = "%s,%s,%s,%s" % (parse["domains_being_blocked"], parse["dns_queries_today"], parse["ads_blocked_today"], parse["ads_percentage_today"])
+            data = "%s;%s;%s;%s" % (parse["domains_being_blocked"], parse["dns_queries_today"], parse["ads_blocked_today"], parse["ads_percentage_today"])
             data += '\n'
             data = str.encode(data)
             print(data)

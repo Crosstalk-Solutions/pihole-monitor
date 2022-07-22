@@ -164,11 +164,11 @@ void loop()
       arcada.display->fillScreen(ARCADA_BLACK);
       arcada.display->setCursor(0, 40);
       String text = String(recvText);
-      text = text.substring(0, text.indexOf(','));
+      text = text.substring(0, text.indexOf(';'));
       arcada.display->println(text);
       text = String(recvText);
-      text = text.substring(text.indexOf(',')+1);
-      text = text.substring(0, text.indexOf(','));
+      text = text.substring(text.indexOf(';')+1);
+      text = text.substring(0, text.indexOf(';'));
       arcada.display->println(text);
       recvText[0]='\0';
     }
