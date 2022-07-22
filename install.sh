@@ -6,7 +6,7 @@ wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
 
 tar xvf bluez-5.64.tar.xz
 
-sudo apt-get install libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev docutils-common python3-pip libfl2
+sudo apt-get install libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev docutils-common python3-pip libfl2 -y
 
 cd bluez-5.64
 
