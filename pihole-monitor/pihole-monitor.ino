@@ -189,14 +189,7 @@ void loop()
     if (cha == '\n')
     {
       DynamicJsonDocument doc(8192);
-      DeserializationError error = deserializeJson(doc, recvText);
-
-      if (error)
-      {
-        Serial.print("deserializeJson() failed: ");
-        Serial.println(error.c_str());
-        return;
-      }
+      deserializeJson(doc, recvText);
       free(numBlocked);
       free(numQueries);
       free(numBlockedToday);
@@ -210,6 +203,7 @@ void loop()
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
+      free(doc);
       recvText[0] = '\0';
     }
   }
