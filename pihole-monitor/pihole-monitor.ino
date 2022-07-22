@@ -97,7 +97,7 @@ void setup()
   apds.begin();
 
   // gesture mode will be entered once proximity mode senses something close
-  apds.enableProximity(true);
+  // apds.enableProximity(true);
   apds.enableGesture(true);
 
   // Set up and start advertising
