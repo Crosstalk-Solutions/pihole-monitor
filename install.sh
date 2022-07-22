@@ -71,3 +71,6 @@ echo -e "Installing service"
 sed -i "s/USERNAME/${USER}/" pihole-monitor.service
 sed -i "s:FILE:${INITIAL_PATH}/main.py:" pihole-monitor.service
 sudo cp pihole-monitor.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl start pihole-monitor
+sudo systemctl enable pihole-monitor
