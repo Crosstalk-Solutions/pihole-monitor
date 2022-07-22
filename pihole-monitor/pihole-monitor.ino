@@ -173,6 +173,8 @@ void loop()
       recvText[0]='\0';
     }
 
+  }
+
   uint8_t gesture = apds.readGesture();
   if (gesture == APDS9960_DOWN) Serial.println("v");
   if (gesture == APDS9960_UP) Serial.println("^");
