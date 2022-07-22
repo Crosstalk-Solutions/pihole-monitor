@@ -23,6 +23,8 @@ const int LEFT_BUTTON = 5;
 
 int color = 0;
 
+bool left_button_state = false;
+
 const int COLORS[] ={0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0,0xFFFF};
 
 #define BLACK    0x0000
@@ -102,7 +104,7 @@ void setup()
   arcada.setBacklight(255);
   arcada.display->fillScreen(ARCADA_BLACK);
   arcada.display->setCursor(0, 10);
-  arcada.display->setTextColor(ARCADA_GREEN);
+  arcada.display->setTextColor(COLORS[3]);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
   arcada.display->setFont(&FreeSansOblique9pt7b);
@@ -153,8 +155,8 @@ void loop()
   }
 
   if(digitalRead(LEFT_BUTTON)== HIGH){
-    color++;
-    arcada.display->setTextColor(COLORS[color]);
+    // color++;
+    // arcada.display->setTextColor(COLORS[color]);
   }
 
   // Forward from BLEUART to HW Serial
