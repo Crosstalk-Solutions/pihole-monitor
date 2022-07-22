@@ -23,6 +23,12 @@ UART_TX_CHAR_UUID = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 UART_SAFE_SIZE = 20
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 async def uart_terminal():
     """This is a simple "terminal" program that uses the Nordic Semiconductor
     (nRF) UART service. It reads from stdin and sends each line of data to the
@@ -77,7 +83,10 @@ async def uart_terminal():
             # line endings (uncomment line below if needed)
             # data = data.replace(b"\n", b"\r\n")
 
-            await client.write_gatt_char(UART_RX_CHAR_UUID, data)
+            data = chunks(data, UART_SAFE_SIZE)
+
+            for chunk in chunks:
+                await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
 
             print("sent:", data)
             time.sleep(10)
