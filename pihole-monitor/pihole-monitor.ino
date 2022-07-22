@@ -294,7 +294,7 @@ void redraw()
     arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
     arcada.display->setCursor(120 - (w / 2), 20);
     arcada.display->println(queriesOverTime);
-    int n = sizeof(domains_over_time) / sizeof(domains_over_time[0]);
+    int n = domains_over_time.size();
     Serial.println(n);
     int largest = -1;
     for (int i = 0; i < n; i++)
