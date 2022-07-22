@@ -166,10 +166,17 @@ void loop()
       String numBlocked = text.substring(0, index);
       int newIndex = text.indexOf(';', index + 1);
       String numQueries = text.substring(index+1, newIndex);
+      index = newIndex;
+      newIndex = text.indexOf(';', index + 1);
+      String numBlockedToday = text.substring(index+1, newIndex);
+      String pctBlockedPercent = text.substring(newIndex+1);
+      pctBlockedPercent += "%";
       arcada.display->fillScreen(ARCADA_BLACK);
       uint16_t w;
       String domainsBlocked = "Domains Blocked";
       String queriesToday = "Queries Today";
+      String blockedToday = "Ads Blocked Today";
+      String blockedPercent = "% Ads Blocked Today";
       arcada.display->setTextSize(1);
       arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 20);
@@ -186,6 +193,22 @@ void loop()
       arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 110);
       arcada.display->println(numQueries);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(blockedToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 140);
+      arcada.display->println(blockedToday);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(numBlockedToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 170);
+      arcada.display->println(numBlockedToday);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(blockedPercent, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 200);
+      arcada.display->println(blockedPercent);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 230);
+      arcada.display->println(pctBlockedPercent);
       recvText[0]='\0';
     }
 
