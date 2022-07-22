@@ -28,10 +28,10 @@ bool left_button_state = false;
 
 const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
-char* numBlocked = "0";
-char* numQueries = "0";
-char* numBlockedToday = "0";
-char* pctBlockedPercent = "0.0%";
+char *numBlocked = strdup("0");
+char *numQueries = strdup("0");
+char *numBlockedToday = strdup("0");
+char *pctBlockedPercent = strdup("0.0%");
 
 #define BLACK 0x0000
 
@@ -188,11 +188,15 @@ void loop()
     {
       StaticJsonDocument<3072> doc;
       deserializeJson(doc, recvText);
-      numBlocked = doc["domains_being_blocked"];
-      numQueries = doc["dns_queries_today"];
-      numBlockedToday = doc["ads_blocked_today"];
-      pctBlockedPercent = doc["ads_percentage_today"];
-      pctBlockedPercent += '%';
+      free(numBlocked);
+      free(numQueries);
+      free(numBlockedToday);
+      free(pctBlockedPercent);
+      numBlocked = strdup(doc["domains_being_blocked"]);
+      numQueries = strdup(doc["dns_queries_today"]);
+      numBlockedToday = strdup(doc["ads_blocked_today"]);
+      pctBlockedPercent = strdup(doc["ads_percentage_today"]);
+      // pctBlockedPercent += '%';
       redraw();
       recvText[0] = '\0';
     }
