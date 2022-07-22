@@ -310,7 +310,7 @@ void redraw()
       arcada.display->drawFastVLine(i, 239-len, len, PIHOLE_COLORS[current_color]);
     }
     arcada.display->setCursor(0, 40);
-    arcada.display->println(largest);
+    arcada.display->println(int(largest));
     arcada.display->setCursor(0,239);
     arcada.display->println("0");
     break;
