@@ -311,7 +311,7 @@ void redraw()
     }
     arcada.display->setCursor(0, 40);
     arcada.display->println(largest);
-    arcada.display->setCursor(0,220);
+    arcada.display->setCursor(0,240);
     arcada.display->println("0");
     break;
   }
