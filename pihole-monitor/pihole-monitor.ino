@@ -32,8 +32,8 @@ char *numBlocked = strdup("0");
 char *numQueries = strdup("0");
 char *numBlockedToday = strdup("0");
 char *pctBlockedPercent = strdup("0.0%");
-JsonArray domains_over_time;
-JsonArray ads_over_time;
+int domains_over_time[150];
+int ads_over_time[150];
 
 #define BLACK 0x0000
 
@@ -198,8 +198,10 @@ void loop()
       numQueries = strdup(doc["dqt"]);
       numBlockedToday = strdup(doc["abt"]);
       pctBlockedPercent = strdup(doc["apt"]);
-      domains_over_time = doc["dot"];
-      ads_over_time = doc["aot"];
+      copyArray(doc["dot"], domains_over_time);
+      copyArray(doc["aot"], ads_over_time);
+      // domains_over_time = doc["dot"];
+      // ads_over_time = doc["aot"];
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
@@ -294,19 +296,19 @@ void redraw()
     arcada.display->getTextBounds(queriesOverTime, 0, 0, NULL, NULL, &w, NULL);
     arcada.display->setCursor(120 - (w / 2), 20);
     arcada.display->println(queriesOverTime);
-    int n = domains_over_time.size();
+    int n = sizeof(domains_over_time)/sizeof(int);
     Serial.println(n);
-    double largest = -1.0;
+    float largest = -1.0;
     for (int i = 0; i < n; i++)
     {
-      if (largest < domains_over_time[i].as<double>())
+      if (largest < domains_over_time[i])
       {
-        largest = domains_over_time[i].as<double>();
+        largest = domains_over_time[i]*1.0;
       }
     }
     Serial.println(largest);
     for(int i = 0; i < n; i++){
-      int len = 200*(domains_over_time[i].as<double>() / largest);
+      int len = 200*(domains_over_time[i] / largest);
       arcada.display->drawFastVLine(i, 239-len, len, PIHOLE_COLORS[current_color]);
     }
     arcada.display->setCursor(0, 40);
