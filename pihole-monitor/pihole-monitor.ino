@@ -162,7 +162,7 @@ void loop()
   } else {
     if(left_button_state){
       current_color++;
-      if(color >= 7){
+      if(current_color >= 7){
         current_color = 0;
       }
       arcada.display->setTextColor(PIHOLE_COLORS[current_color]);
