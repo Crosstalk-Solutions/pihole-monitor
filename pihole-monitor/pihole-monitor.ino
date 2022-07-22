@@ -186,7 +186,7 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
-      StaticJsonDocument<2900> doc;
+      DynamicJsonDocument doc(4096);
       DeserializationError error = deserializeJson(doc, recvText);
 
       if (error)
