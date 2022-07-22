@@ -21,7 +21,7 @@
 
 const int LEFT_BUTTON = 5;
 
-int color = 0;
+int current_color = 0;
 
 bool left_button_state = false;
 
@@ -53,7 +53,6 @@ char recvText[1] = "";
 void setup()
 {
   Serial.begin(115200);
-
 #if CFG_DEBUG
   // Blocking wait for connection when debug mode is enabled via IDE
   while ( !Serial ) yield();
@@ -109,7 +108,7 @@ void setup()
   arcada.setBacklight(255);
   arcada.display->fillScreen(ARCADA_BLACK);
   arcada.display->setCursor(0, 10);
-  arcada.display->setTextColor(PIHOLE_COLORS[0]);
+  arcada.display->setTextColor(PIHOLE_COLORS[current_color]);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
   arcada.display->setFont(&FreeSansOblique9pt7b);
@@ -162,9 +161,9 @@ void loop()
     left_button_state = false;
   } else {
     if(left_button_state){
-      color++;
-      if(color >= sizeof(PIHOLE_COLORS)){
-        color = 0;
+      current_color++;
+      if(color >= 7){
+        current_color = 0;
       }
       arcada.display->setTextColor(PIHOLE_COLORS[color]);
       redraw();
