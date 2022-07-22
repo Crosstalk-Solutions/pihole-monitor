@@ -39,7 +39,7 @@ Adafruit_Arcada arcada;
 #include "Adafruit_APDS9960.h"
 Adafruit_APDS9960 apds;
 
-String recvText = "";
+char recvText[1] = "";
 
 
 
@@ -159,17 +159,19 @@ void loop()
     char cha = bleuart.read();
     ch = (uint8_t) cha;
     Serial.write(ch);
-    recvText.concat(ch);
+    strncat(recvText, &cha, 1);
     if (cha == '\n') {
-      int index = recvText.indexOf(";");
-      String numBlocked = recvText.substring(0, index);
       arcada.display->fillScreen(ARCADA_BLACK);
       arcada.display->setCursor(0, 40);
-      arcada.display->println("Blocked Domains");
-      arcada.display->println(numBlocked);
-      recvText = "";
+      String text = String(recvText);
+      text = text.substring(0, text.indexOf(';'));
+      arcada.display->println(text);
+      text = String(recvText);
+      text = text.substring(text.indexOf(';')+1);
+      text = text.substring(0, text.indexOf(';'));
+      arcada.display->println(text);
+      recvText[0]='\0';
     }
-  }
 
   uint8_t gesture = apds.readGesture();
   if (gesture == APDS9960_DOWN) Serial.println("v");
