@@ -77,7 +77,7 @@ async def uart_terminal():
             data = str.encode(data)
             # data will be empty on EOF (e.g. CTRL+D on *nix)
             if not data:
-                print(no data)
+                print("no data")
                 break
 
             # some devices, like devices running MicroPython, expect Windows
