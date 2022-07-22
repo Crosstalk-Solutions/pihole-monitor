@@ -161,13 +161,15 @@ void loop()
     Serial.write(ch);
     strncat(recvText, &cha, 1);
     if (cha == '\n') {
-      arcada.display->fillScreen(ARCADA_BLACK);
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
-      // X value is determined by: char length 120-((c * 9)/2) 
+      int newIndex = text.indexOf(';', index + 1);
+      String numQueries = text.substring(index+1, newIndex);
+      arcada.display->fillScreen(ARCADA_BLACK);
       uint16_t w;
       String domainsBlocked = "Domains Blocked";
+      String queriesToday = "Queries Today";
       arcada.display->setTextSize(1);
       arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 20);
@@ -176,6 +178,14 @@ void loop()
       arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 50);
       arcada.display->println(numBlocked);
+      arcada.display->setTextSize(1);
+      arcada.display->getTextBounds(queriesToday, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 80);
+      arcada.display->println(queriesToday);
+      arcada.display->setTextSize(2);
+      arcada.display->getTextBounds(numQueries, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 110);
+      arcada.display->println(numQueries);
       recvText[0]='\0';
     }
 
