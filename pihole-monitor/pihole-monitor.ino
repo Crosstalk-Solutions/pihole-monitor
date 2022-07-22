@@ -216,9 +216,9 @@ void loop()
   {
     Serial.println("DOWN"); // ACTUALLY RIGHT
     current_screen++;
-    if(current_screen >= 1)
+    if(current_screen > 1)
     {
-      current_screen = 0;
+      current_screen = 1;
     }
     redraw();
   }
