@@ -170,7 +170,7 @@ void loop()
       newIndex = text.indexOf(';', index + 1);
       String numBlockedToday = text.substring(index+1, newIndex);
       String pctBlockedPercent = text.substring(newIndex+1);
-      pctBlockedPercent += "%";
+      pctBlockedPercent.concat("%");
       arcada.display->fillScreen(ARCADA_BLACK);
       uint16_t w;
       String domainsBlocked = "Domains Blocked";
