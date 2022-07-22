@@ -39,7 +39,7 @@ Adafruit_Arcada arcada;
 #include "Adafruit_APDS9960.h"
 Adafruit_APDS9960 apds;
 
-char recvText[1] = "";
+String recvText = "";
 
 
 
@@ -159,22 +159,14 @@ void loop()
     char cha = bleuart.read();
     ch = (uint8_t) cha;
     Serial.write(ch);
-    strncat(recvText, &cha, 1);
+    recvText.concat(ch);
     if (cha == '\n') {
-      char *strings[4]; // an array of pointers to the pieces of the above array after strtok()
-      char *ptr = NULL;
-      ptr = strtok(recvText, ";");  // delimiter
-      while (ptr != NULL)
-      {
-          strings[index] = ptr;
-          index++;
-          ptr = strtok(NULL, ";");
-      }
-
+      int index = recvText.indexOf(';');
+      String numBlocked = recvText.substring(0, index);
       arcada.display->fillScreen(ARCADA_BLACK);
       arcada.display->setCursor(0, 40);
       arcada.display->println("Blocked Domains");
-      arcada.display->println(strings[0]);
+      arcada.display->println(numBlocked);
       recvText[0]='\0';
     }
   }
