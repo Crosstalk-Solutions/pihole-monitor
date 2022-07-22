@@ -167,9 +167,13 @@ void loop()
       String numBlocked = text.substring(0, index);
       arcada.display->setTextSize(1);
       // X value is determined by: char length 120-((c * 9)/2) 
-      arcada.display->setCursor(getCenterX(15, 1), 20);
-      arcada.display->println("Domains Blocked");
-      arcada.display->setCursor(getCenterX(numBlocked.length(), 2), 50);
+      String domainsBlocked = "Domains Blocked";
+      uint16_t w;
+      arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 20);
+      arcada.display->println(domainsBlocked);
+      arcada.display->getTextBounds(numBlocked, 0, 0, NULL, NULL, &w, NULL);
+      arcada.display->setCursor(120-(w/2), 50);
       arcada.display->setTextSize(2);
       arcada.display->println(numBlocked);
       recvText[0]='\0';
@@ -182,10 +186,6 @@ void loop()
   if (gesture == APDS9960_UP) Serial.println("^");
   if (gesture == APDS9960_LEFT) Serial.println("<");
   if (gesture == APDS9960_RIGHT) Serial.println(">");
-}
-
-int getCenterX(int len, int scale) {
-  return (120 - (len * 9 * scale)/2);
 }
 
 // callback invoked when central connects
