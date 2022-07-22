@@ -203,7 +203,8 @@ void loop()
       numQueries = strdup(doc["dns_queries_today"]);
       numBlockedToday = strdup(doc["ads_blocked_today"]);
       pctBlockedPercent = strdup(doc["ads_percentage_today"]);
-      // pctBlockedPercent += '%';
+      char pct = '%';
+      strncat(pctBlockedPercent, &pct, 1);
       redraw();
       recvText[0] = '\0';
     }
