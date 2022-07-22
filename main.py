@@ -71,9 +71,9 @@ async def uart_terminal():
             fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
             parse2 = json.loads(fetched)
             domains_over_time = parse2['domains_over_time'].values()
-            ads_over_Time = parse2['ads_over_time'].values()
+            ads_over_time = parse2['ads_over_time'].values()
             parse['domains_over_time'] = domains_over_time
-            parse['ads_over_time'] = ads_over_Time
+            parse['ads_over_time'] = ads_over_time
             data = json.dumps(parse)
             print(data)
             data += '\n'
