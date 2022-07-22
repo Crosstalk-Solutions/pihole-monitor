@@ -211,7 +211,7 @@ void redraw(){
       String domainsBlocked = "Domains Blocked";
       String queriesToday = "Queries Today";
       String blockedToday = "Ads Blocked Today";
-      String blockedPercent = "% Ads Blocked Today";
+      String blockedPercent = "% Queries Blocked Today";
       arcada.display->setTextSize(1);
       arcada.display->getTextBounds(domainsBlocked, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 20);
