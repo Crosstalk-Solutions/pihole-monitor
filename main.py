@@ -80,7 +80,6 @@ async def uart_terminal():
             small['dot'] = domains_over_time
             small['aot'] = ads_over_time
             data = json.dumps(small, separators=(',', ':'))
-            print(data)
             data += '\n'
             data = str.encode(data)
             # data will be empty on EOF (e.g. CTRL+D on *nix)
@@ -95,10 +94,9 @@ async def uart_terminal():
             data = chunks(data, UART_SAFE_SIZE)
 
             for chunk in data:
-                print(chunk)
                 await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
 
-            print("sent:", data)
+            print("sent:", len(data), "chunks")
             time.sleep(10)
 
 
