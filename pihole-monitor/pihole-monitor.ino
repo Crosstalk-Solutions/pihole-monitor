@@ -186,7 +186,7 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
-      StaticJsonDocument<3072> doc;
+      StaticJsonDocument<768> doc;
       deserializeJson(doc, recvText);
       free(numBlocked);
       free(numQueries);
