@@ -15,7 +15,7 @@
 #include <Adafruit_LittleFS.h>
 #include <InternalFileSystem.h>
 #include "Adafruit_Arcada.h"
-#include <Fonts/FreeSansOblique18pt7b.h>
+#include <Fonts/FreeSansOblique9pt7b.h>
 
 // Color definitions
 #define BLACK    0x0000
@@ -166,9 +166,9 @@ void loop()
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
-      arcada.display->setTextSize(0.5);
-      arcada.display->println("Domains Blocked");
       arcada.display->setTextSize(1);
+      arcada.display->println("Domains Blocked");
+      arcada.display->setTextSize(2);
       arcada.display->println(numBlocked);
       recvText[0]='\0';
     }
