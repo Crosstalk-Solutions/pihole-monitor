@@ -74,7 +74,7 @@ async def uart_terminal():
             ads_over_time = list(parse2['ads_over_time'].values())
             parse['domains_over_time'] = domains_over_time
             parse['ads_over_time'] = ads_over_time
-            data = json.dumps(parse)
+            data = json.dumps(parse, separators=(',', ':'))
             print(data)
             data += '\n'
             data = str.encode(data)
