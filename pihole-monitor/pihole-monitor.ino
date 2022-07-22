@@ -296,6 +296,7 @@ void redraw()
     arcada.display->setCursor(120 - (w / 2), 20);
     arcada.display->println(queriesOverTime);
     int n = sizeof(domains_over_time) / sizeof(domains_over_time[0]);
+    Serial.println(n);
     int largest = -1;
     for (int i = 0; i < n; i++)
     {
@@ -304,6 +305,7 @@ void redraw()
         largest = domains_over_time[i].as<int>();
       }
     }
+    Serial.println(largest);
     for(int i = 0; i < n; i++){
       arcada.display->drawFastVLine(i, 240, 200*(domains_over_time[i].as<int>() / largest), PIHOLE_COLORS[current_color]);
     }
