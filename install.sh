@@ -6,7 +6,7 @@ INITIAL_PATH=$(pwd)
 cd ~
 
 echo "Downloading bluez"
-spinner wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
+spinner wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz -q
 echo -e "\xE2\x9C\x94 Downloaded bluez"
 
 echo "Unzipping bluez"
