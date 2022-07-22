@@ -162,11 +162,12 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n') {
       arcada.display->fillScreen(ARCADA_BLACK);
-      arcada.display->setCursor(0, 20);
       String text = String(recvText);
       int index = text.indexOf(';');
       String numBlocked = text.substring(0, index);
       arcada.display->setTextSize(1);
+      // X value is determined by: char length 120-((c * 9)/2) 
+      arcada.display->setCursor(53, 20);
       arcada.display->println("Domains Blocked");
       arcada.display->setCursor(0, 50);
       arcada.display->setTextSize(2);
