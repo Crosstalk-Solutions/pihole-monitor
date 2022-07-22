@@ -25,7 +25,12 @@ int color = 0;
 
 bool left_button_state = false;
 
-const int COLORS[] ={0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0,0xFFFF};
+const int COLORS[] ={0xFFFF,0x001F,0xF800,0x07E0,0x7FF,0xF81F,0xFFE0};
+
+String numBlocked = "0";
+String numQueries = "0";
+String numBlockedToday = "0";
+String pctBlockedPercent = "0.0%";
 
 #define BLACK    0x0000
 
@@ -104,13 +109,12 @@ void setup()
   arcada.setBacklight(255);
   arcada.display->fillScreen(ARCADA_BLACK);
   arcada.display->setCursor(0, 10);
-  arcada.display->setTextColor(COLORS[3]);
+  arcada.display->setTextColor(COLORS[0]);
   arcada.display->setTextWrap(true);
   arcada.display->setTextSize(1);
   arcada.display->setFont(&FreeSansOblique9pt7b);
 
-  Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
-  Serial.println("Once connected, enter character(s) that you wish to send");
+  redraw();
 }
 
 void startAdv(void)
@@ -159,7 +163,11 @@ void loop()
   } else {
     if(left_button_state){
       color++;
+      if(color >= sizeof(COLORS)){
+        color = 0;
+      }
       arcada.display->setTextColor(COLORS[color]);
+      redraw();
     }
     left_button_state = true;
   }
@@ -175,16 +183,30 @@ void loop()
     if (cha == '\n') {
       String text = String(recvText);
       int index = text.indexOf(';');
-      String numBlocked = text.substring(0, index);
+      numBlocked = text.substring(0, index);
       int newIndex = text.indexOf(';', index + 1);
-      String numQueries = text.substring(index+1, newIndex);
+      numQueries = text.substring(index+1, newIndex);
       index = newIndex;
       newIndex = text.indexOf(';', index + 1);
-      String numBlockedToday = text.substring(index+1, newIndex);
+      numBlockedToday = text.substring(index+1, newIndex);
       index = newIndex;
       newIndex = text.indexOf('\n', index + 1);
-      String pctBlockedPercent = text.substring(index+1, newIndex);
+      pctBlockedPercent = text.substring(index+1, newIndex);
       pctBlockedPercent += '%';
+      redraw();
+      recvText[0]='\0';
+    }
+
+  }
+
+  uint8_t gesture = apds.readGesture();
+  if (gesture == APDS9960_DOWN) Serial.println("v");
+  if (gesture == APDS9960_UP) Serial.println("^");
+  if (gesture == APDS9960_LEFT) Serial.println("<");
+  if (gesture == APDS9960_RIGHT) Serial.println(">");
+}
+
+void redraw(){
       arcada.display->fillScreen(ARCADA_BLACK);
       uint16_t w;
       String domainsBlocked = "Domains Blocked";
@@ -223,16 +245,6 @@ void loop()
       arcada.display->getTextBounds(pctBlockedPercent, 0, 0, NULL, NULL, &w, NULL);
       arcada.display->setCursor(120-(w/2), 230);
       arcada.display->println(pctBlockedPercent);
-      recvText[0]='\0';
-    }
-
-  }
-
-  uint8_t gesture = apds.readGesture();
-  if (gesture == APDS9960_DOWN) Serial.println("v");
-  if (gesture == APDS9960_UP) Serial.println("^");
-  if (gesture == APDS9960_LEFT) Serial.println("<");
-  if (gesture == APDS9960_RIGHT) Serial.println(">");
 }
 
 // callback invoked when central connects
