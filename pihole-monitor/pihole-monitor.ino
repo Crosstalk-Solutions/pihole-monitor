@@ -137,7 +137,7 @@ void loop()
     char cha = bleuart.read();
     ch = (uint8_t)cha;
     Serial.write(ch);
-    strncat(recvText, &cha, 1);
+    strcat(recvText, &cha);
     if (cha == '\n')
     {
       DynamicJsonDocument doc(8192);
