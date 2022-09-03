@@ -1,3 +1,16 @@
+/*********************************************************************
+  This is an example for our nRF52 based Bluefruit LE modules
+
+  Pick one up today in the adafruit shop!
+
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
+  products from Adafruit!
+
+  MIT license, check LICENSE for more information
+  All text above, and the splash screen below must be included in
+  any redistribution
+*********************************************************************/
 #include <bluefruit.h>
 #include <Adafruit_LittleFS.h>
 #include <InternalFileSystem.h>
@@ -10,8 +23,9 @@ typedef volatile uint32_t REG32;
 #define MAC_ADDRESS_HIGH (*(pREG32(0x100000a8)))
 #define MAC_ADDRESS_LOW (*(pREG32(0x100000a4)))
 
+// Color definitions
+
 const int LEFT_BUTTON = 5;
-const int RIGHT_BUTTON = 11;
 
 int current_color = 0;
 int current_screen = 0;
@@ -29,6 +43,7 @@ int ads_over_time[150];
 
 #define BLACK 0x0000
 
+// BLE Service
 BLEDis bledis;
 BLEUart bleuart;
 
@@ -43,10 +58,7 @@ char recvText[1] = "";
 void setup()
 {
   Serial.begin(115200);
-
-  pinMode(LEFT_BUTTON, INPUT_PULLUP);
-  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
-
+  
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
 
@@ -83,6 +95,9 @@ void startAdv(void)
 
   Bluefruit.ScanResponse.addName();
 
+  /*
+     https://developer.apple.com/library/content/qa/qa1931/_index.html
+  */
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244);
   Bluefruit.Advertising.setFastTimeout(30);
@@ -91,7 +106,7 @@ void startAdv(void)
 
 void loop()
 {
-  if (!Bluefruit.connected())
+  if(!Bluefruit.connected())
   {
     printMAC();
   }
@@ -103,7 +118,7 @@ void loop()
   {
     if (left_button_state)
     {
-      Serial.println("L Button clicked");
+      Serial.println("Button clicked");
       current_color++;
       if (current_color >= 7)
       {
@@ -115,13 +130,14 @@ void loop()
     left_button_state = true;
   }
 
+  // Forward from BLEUART to HW Serial
   while (bleuart.available())
   {
     uint8_t ch;
     char cha = bleuart.read();
     ch = (uint8_t)cha;
     Serial.write(ch);
-    strcat(recvText, &cha);
+    strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
       DynamicJsonDocument doc(8192);
@@ -177,8 +193,7 @@ void loop()
   }
 }
 
-void printMAC()
-{
+void printMAC(){
   uint32_t addr_high = ((MAC_ADDRESS_HIGH)&0x0000ffff) | 0x0000c000;
   uint32_t addr_low = MAC_ADDRESS_LOW;
   Serial.print((addr_high >> 8) & 0xFF, HEX);
