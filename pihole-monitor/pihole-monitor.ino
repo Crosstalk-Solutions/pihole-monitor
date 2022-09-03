@@ -114,8 +114,9 @@ void loop()
     left_button_state = true;
   }
 
-  if (digitalRead(RIGHT_BUTTON) != HIGH)
+  if (digitalRead(RIGHT_BUTTON) == LOW)
   {
+    Serial.println("Right button pressed");
     trigger_pause = true;
   }
 
@@ -128,10 +129,6 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
-      if(trigger_pause) {
-        trigger_pause = false;
-        bleuart.write("5");
-      }
       DynamicJsonDocument doc(8192);
       deserializeJson(doc, recvText);
       free(numBlocked);
@@ -149,6 +146,10 @@ void loop()
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
+      if(trigger_pause) {
+        trigger_pause = false;
+        bleuart.write("5");
+      }
       recvText[0] = '\0';
     }
   }
