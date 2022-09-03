@@ -10,6 +10,7 @@ import sys
 import urllib.request
 import json
 import time
+import threading
 from bleak import BleakScanner, BleakClient
 from bleak.backends.scanner import AdvertisementData
 from bleak.backends.device import BLEDevice
@@ -61,46 +62,49 @@ async def uart_terminal():
         print("Connected...")
 
         loop = asyncio.get_running_loop()
+        prev_time = time.time()
 
         while True:
             # This waits until you type a line and press ENTER.
             # A real terminal program might put stdin in raw mode so that things
             # like CTRL+C get passed to the remote device.
-            small = dict()
-            fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
-            parse = json.loads(fetched)
-            small["dbb"] = parse["domains_being_blocked"]
-            small["dqt"] = parse["dns_queries_today"]
-            small["abt"] = parse["ads_blocked_today"]
-            small["apt"] = parse["ads_percentage_today"]
-            fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
-            parse = json.loads(fetched)
-            domains_over_time = list(parse['domains_over_time'].values())
-            ads_over_time = list(parse['ads_over_time'].values())
-            small['dot'] = domains_over_time
-            small['aot'] = ads_over_time
-            data = json.dumps(small, separators=(',', ':'))
-            data += '\n'
-            data = str.encode(data)
-            # data will be empty on EOF (e.g. CTRL+D on *nix)
-            if not data:
-                print("no data")
-                break
+            if time.time() - 10 > prev_time:
+                prev_time = time.time()
+                small = dict()
+                fetched = urllib.request.urlopen("http://localhost/admin/api.php?summary").read()
+                parse = json.loads(fetched)
+                small["dbb"] = parse["domains_being_blocked"]
+                small["dqt"] = parse["dns_queries_today"]
+                small["abt"] = parse["ads_blocked_today"]
+                small["apt"] = parse["ads_percentage_today"]
+                fetched = urllib.request.urlopen("http://localhost/admin/api.php?overTimeData10mins").read()
+                parse = json.loads(fetched)
+                domains_over_time = list(parse['domains_over_time'].values())
+                ads_over_time = list(parse['ads_over_time'].values())
+                small['dot'] = domains_over_time
+                small['aot'] = ads_over_time
+                data = json.dumps(small, separators=(',', ':'))
+                data += '\n'
+                data = str.encode(data)
+                # data will be empty on EOF (e.g. CTRL+D on *nix)
+                if not data:
+                    print("no data")
+                    break
 
-            # some devices, like devices running MicroPython, expect Windows
-            # line endings (uncomment line below if needed)
-            data = data.replace(b"\n", b"\r\n")
+                # some devices, like devices running MicroPython, expect Windows
+                # line endings (uncomment line below if needed)
+                data = data.replace(b"\n", b"\r\n")
 
-            data = chunks(data, UART_SAFE_SIZE)
+                data = chunks(data, UART_SAFE_SIZE)
 
-            for chunk in data:
-                await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
+                for chunk in data:
+                    await client.write_gatt_char(UART_RX_CHAR_UUID, chunk)
 
-            print("sent")
+                print("sent")
 
             data = await client.read_gatt_char(UART_TX_CHAR_UUID)
             print("received:", data)
-            time.sleep(10)
+            time.sleep(1)
 
 
 if __name__ == "__main__":
