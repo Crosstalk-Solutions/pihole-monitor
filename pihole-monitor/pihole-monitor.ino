@@ -128,7 +128,7 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
-      if(trigger_pause)
+      if(trigger_pause) {
         trigger_pause = false;
         bleuart.write("5");
       }
