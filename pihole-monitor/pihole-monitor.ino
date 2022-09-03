@@ -26,6 +26,7 @@ typedef volatile uint32_t REG32;
 // Color definitions
 
 const int LEFT_BUTTON = 5;
+const int RIGHT_BUTTON = 11;
 
 int current_color = 0;
 int current_screen = 0;
@@ -58,6 +59,8 @@ char recvText[1] = "";
 void setup()
 {
   Serial.begin(115200);
+  pinMode(LEFT_BUTTON, INPUT_PULLUP);
+  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
   
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
