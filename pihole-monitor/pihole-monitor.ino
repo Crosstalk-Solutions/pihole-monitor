@@ -46,6 +46,9 @@ void setup()
 {
   Serial.begin(115200);
 
+  pinMode(LEFT_BUTTON, INPUT_PULLUP);
+  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
+
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
 
