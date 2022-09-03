@@ -24,7 +24,7 @@ echo "Configuring bluez"
 spinner ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library -disable-systemd
 echo -e "\xE2\x9C\x94 Configured bluez"
 
-echo "Building bluez"
+echo "Building bluez (This may take a long time!)"
 spinner make
 echo -e "\xE2\x9C\x94 Built bluez"
 
