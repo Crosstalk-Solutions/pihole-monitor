@@ -76,9 +76,6 @@ async def uart_terminal():
 
             print("sent")
 
-            data = await client.read_gatt_char(UART_TX_CHAR_UUID)
-            print("received:", data)
-
             time.sleep(10)
 
 

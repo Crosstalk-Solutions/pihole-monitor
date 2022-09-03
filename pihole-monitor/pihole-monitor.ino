@@ -130,6 +130,10 @@ void loop()
     left_button_state = true;
   }
 
+  if(digitalRead(RIGHT_BUTTON) == HIGH){
+  bleuart.write("1");
+  }
+
   // Forward from BLEUART to HW Serial
   while (bleuart.available())
   {
