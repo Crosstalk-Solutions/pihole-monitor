@@ -17,8 +17,6 @@ int current_color = 0;
 int current_screen = 0;
 
 bool left_button_state = false;
-bool right_button_state = false;
-bool trigger_pause = false;
 
 const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
@@ -117,20 +115,6 @@ void loop()
     left_button_state = true;
   }
 
-  if (digitalRead(RIGHT_BUTTON) == HIGH)
-  {
-    right_button_state = false;
-  }
-  else
-  {
-    if (right_button_state)
-    {
-      Serial.println("R Button clicked");
-//       trigger_pause = true;
-    }
-    right_button_state = true;
-  }
-
   while (bleuart.available())
   {
     uint8_t ch;
@@ -157,11 +141,6 @@ void loop()
       char pct = '%';
       strncat(pctBlockedPercent, &pct, 1);
       redraw();
-      if(trigger_pause) {
-        trigger_pause = false;
-        Serial.println("Sending pause");
-        bleuart.write("5");
-      }
       recvText[0] = '\0';
     }
   }
