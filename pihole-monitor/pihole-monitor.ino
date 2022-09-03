@@ -1,16 +1,3 @@
-/*********************************************************************
-  This is an example for our nRF52 based Bluefruit LE modules
-
-  Pick one up today in the adafruit shop!
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  MIT license, check LICENSE for more information
-  All text above, and the splash screen below must be included in
-  any redistribution
-*********************************************************************/
 #include <bluefruit.h>
 #include <Adafruit_LittleFS.h>
 #include <InternalFileSystem.h>
@@ -23,14 +10,14 @@ typedef volatile uint32_t REG32;
 #define MAC_ADDRESS_HIGH (*(pREG32(0x100000a8)))
 #define MAC_ADDRESS_LOW (*(pREG32(0x100000a4)))
 
-// Color definitions
-
 const int LEFT_BUTTON = 5;
+const int RIGHT_BUTTON = 11;
 
 int current_color = 0;
 int current_screen = 0;
 
 bool left_button_state = false;
+bool right_button_state = false;
 
 const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
@@ -43,7 +30,6 @@ int ads_over_time[150];
 
 #define BLACK 0x0000
 
-// BLE Service
 BLEDis bledis;
 BLEUart bleuart;
 
@@ -95,9 +81,6 @@ void startAdv(void)
 
   Bluefruit.ScanResponse.addName();
 
-  /*
-     https://developer.apple.com/library/content/qa/qa1931/_index.html
-  */
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244);
   Bluefruit.Advertising.setFastTimeout(30);
@@ -130,7 +113,16 @@ void loop()
     left_button_state = true;
   }
 
-  // Forward from BLEUART to HW Serial
+  if(digitalRead(RIGHT_BUTTON) == HIGH)
+  {
+  right_button_state = false;
+  } else {
+  if(right_button_state){
+  Serial.println("Button clicked");
+  bleuart.write("5");
+  right_button_state = true;
+  }
+
   while (bleuart.available())
   {
     uint8_t ch;
