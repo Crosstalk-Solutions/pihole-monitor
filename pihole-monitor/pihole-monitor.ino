@@ -122,6 +122,7 @@ void loop()
     if (left_button_state)
     {
       Serial.println("Button clicked");
+      bleuart.write("1");
       current_color++;
       if (current_color >= 7)
       {
@@ -134,7 +135,6 @@ void loop()
   }
 
   if(digitalRead(RIGHT_BUTTON) == HIGH){
-  bleuart.write("1");
   }
 
   // Forward from BLEUART to HW Serial
