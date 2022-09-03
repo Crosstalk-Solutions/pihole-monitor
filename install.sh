@@ -64,17 +64,16 @@ echo "Installing Arduino libraries"
 spinner arduino-cli lib install "Adafruit Arcada Library"
 echo -e "\xE2\x9C\x94 Installed Arduino libraries"
 
-echo "Compiling sketch"
+echo "Compiling firmware"
 spinner arduino-cli compile -b adafruit:nrf52:cluenrf52840 pihole-monitor/
-echo -e "\xE2\x9C\x94 Compiled sketch"
+echo -e "\xE2\x9C\x94 Compiled firmware"
 
 echo -e "Uploading to CLUE"
 arduino-cli upload -b adafruit:nrf52:cluenrf52840 -p /dev/ttyACM0 pihole-monitor/
 
 sleep 5
 read -r line < /dev/ttyACM0
-echo "Read MAC Address: $line"
-
+echo "Saving MAC address: $line"
 sed -i "s/00:00:00:00:00:00/$line/" main.py
 
 echo -e "Installing service"
@@ -84,3 +83,5 @@ sudo cp pihole-monitor.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl start pihole-monitor
 sudo systemctl enable pihole-monitor
+
+echo -e "Done!"
