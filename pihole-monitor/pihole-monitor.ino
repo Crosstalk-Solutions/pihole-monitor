@@ -122,6 +122,7 @@ void loop()
   bleuart.write("5");
   right_button_state = true;
   }
+  }
 
   while (bleuart.available())
   {
