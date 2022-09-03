@@ -44,7 +44,7 @@ char recvText[1] = "";
 void setup()
 {
   Serial.begin(115200);
-  
+
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
 
@@ -89,7 +89,7 @@ void startAdv(void)
 
 void loop()
 {
-  if(!Bluefruit.connected())
+  if (!Bluefruit.connected())
   {
     printMAC();
   }
@@ -113,15 +113,18 @@ void loop()
     left_button_state = true;
   }
 
-  if(digitalRead(RIGHT_BUTTON) == HIGH)
+  if (digitalRead(RIGHT_BUTTON) == HIGH)
   {
-  right_button_state = false;
-  } else {
-  if(right_button_state){
-  Serial.println("Button clicked");
-  bleuart.write("5");
-  right_button_state = true;
+    right_button_state = false;
   }
+  else
+  {
+    if (right_button_state)
+    {
+      Serial.println("Button clicked");
+      bleuart.write("5");
+      right_button_state = true;
+    }
   }
 
   while (bleuart.available())
@@ -186,7 +189,8 @@ void loop()
   }
 }
 
-void printMAC(){
+void printMAC()
+{
   uint32_t addr_high = ((MAC_ADDRESS_HIGH)&0x0000ffff) | 0x0000c000;
   uint32_t addr_low = MAC_ADDRESS_LOW;
   Serial.print((addr_high >> 8) & 0xFF, HEX);
