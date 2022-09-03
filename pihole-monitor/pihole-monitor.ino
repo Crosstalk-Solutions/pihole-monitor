@@ -18,6 +18,7 @@ int current_screen = 0;
 
 bool left_button_state = false;
 bool right_button_state = false;
+bool trigger_pause = false;
 
 const int PIHOLE_COLORS[] = {0xFFFF, 0x001F, 0xF800, 0x07E0, 0x7FF, 0xF81F, 0xFFE0};
 
@@ -113,18 +114,9 @@ void loop()
     left_button_state = true;
   }
 
-  if (digitalRead(RIGHT_BUTTON) == HIGH)
+  if (digitalRead(RIGHT_BUTTON) != HIGH)
   {
-    right_button_state = false;
-  }
-  else
-  {
-    if (right_button_state)
-    {
-      Serial.println("Button clicked");
-      bleuart.write("5");
-      right_button_state = true;
-    }
+    trigger_pause = true;
   }
 
   while (bleuart.available())
@@ -136,6 +128,10 @@ void loop()
     strncat(recvText, &cha, 1);
     if (cha == '\n')
     {
+      if(trigger_pause)
+        trigger_pause = false;
+        bleuart.write("5");
+      }
       DynamicJsonDocument doc(8192);
       deserializeJson(doc, recvText);
       free(numBlocked);
