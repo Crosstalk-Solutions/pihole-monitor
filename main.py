@@ -14,6 +14,11 @@ UART_TX_CHAR_UUID = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 UART_SAFE_SIZE = 20
 
+f = open("/etc/pihole/setupVars.conf", "r")
+conf = f.read()
+f.close()
+WEBPASSWORD = conf.split("WEBPASSWORD=")[1].split("\n")[0]
+
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):
@@ -37,6 +42,8 @@ async def uart_terminal():
 
     def handle_rx(_: int, data: bytearray):
         print("received:", data)
+        if data == b'1':
+            urllib.request.urlopen("http://localhost/admin/api.php?disable=300&auth=" + WEBPASSWORD)
 
     async with BleakClient(device, disconnected_callback=handle_disconnect) as client:
         await client.start_notify(UART_TX_CHAR_UUID, handle_rx)
