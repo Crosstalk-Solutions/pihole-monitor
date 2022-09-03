@@ -105,7 +105,7 @@ void loop()
   {
     if (left_button_state)
     {
-      Serial.println("Button clicked");
+      Serial.println("L Button clicked");
       current_color++;
       if (current_color >= 7)
       {
@@ -117,10 +117,18 @@ void loop()
     left_button_state = true;
   }
 
-  if (digitalRead(RIGHT_BUTTON) == LOW)
+  if (digitalRead(RIGHT_BUTTON) == HIGH)
   {
-    Serial.println("Right button pressed");
-    trigger_pause = true;
+    right_button_state = false;
+  }
+  else
+  {
+    if (right_button_state)
+    {
+      Serial.println("R Button clicked");
+//       trigger_pause = true;
+    }
+    right_button_state = true;
   }
 
   while (bleuart.available())
@@ -151,6 +159,7 @@ void loop()
       redraw();
       if(trigger_pause) {
         trigger_pause = false;
+        Serial.println("Sending pause");
         bleuart.write("5");
       }
       recvText[0] = '\0';
