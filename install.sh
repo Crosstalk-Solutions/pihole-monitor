@@ -54,6 +54,7 @@ export PATH="$HOME/.local/bin:$PATH"
 echo "Configuring Arduino CLI"
 spinner arduino-cli config init
 spinner arduino-cli config set board_manager.additional_urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+arduino-cli core update-index
 echo -e "\xE2\x9C\x94 Configured Arduino CLI"
 
 echo "Installing Arduino board"
